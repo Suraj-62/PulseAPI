@@ -1,0 +1,233 @@
+/* ==========================================================================
+   PULSEAPI DESIGN SYSTEM & STYLING BLUEPRINT
+   Linear / Vercel / Stripe-Inspired Developer Aesthetic
+   ========================================================================== */
+
+/* Design Tokens & CSS Custom Properties */
+:root {
+  /* Surface Tokens */
+  --bg-canvas: #09090B;
+  --bg-card: #0F0F12;
+  --bg-elevated: #111116;
+  --bg-section-alt: #0C0D10;
+  
+  /* Border Tokens */
+  --border-default: rgba(255, 255, 255, 0.08);
+  --border-divider: rgba(255, 255, 255, 0.04);
+  --border-hover: rgba(255, 255, 255, 0.16);
+
+  /* Primary Accent (Emerald / Health / Success) */
+  --emerald-default: #34D399;
+  --emerald-hover: #6EE7B7;
+  --emerald-pill: rgba(52, 211, 153, 0.1);
+  --emerald-glow: rgba(52, 211, 153, 0.25);
+  --emerald-border: rgba(52, 211, 153, 0.2);
+
+  /* Secondary Accent (Purple / Method Badges) */
+  --purple-default: #A78BFA;
+  --purple-pill: rgba(167, 139, 250, 0.1);
+  --purple-border: rgba(167, 139, 250, 0.2);
+
+  /* Error / Latency Alert */
+  --rose-default: #F87171;
+  --rose-pill: rgba(248, 113, 113, 0.1);
+  --rose-border: rgba(248, 113, 113, 0.2);
+
+  /* Typography Colors */
+  --text-white: #EDEDED;
+  --text-muted: #A1A1AA;
+  --text-dim: #71717A;
+  --text-dark: #52525B;
+
+  /* Typography Stacks */
+  --font-sans: 'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* Reset & Base Styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--font-sans);
+  background-color: var(--bg-canvas);
+  color: var(--text-white);
+  color-scheme: dark;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: var(--bg-canvas);
+  color: var(--text-white);
+  line-height: 1.6;
+}
+
+/* Typography Utility Classes */
+.font-mono {
+  font-family: var(--font-mono);
+  font-feature-settings: "tnum" 1, "zero" 1;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Hero Typography: 72px Desktop, -0.04em Letter Spacing, Line Height 1.05 */
+.hero-heading {
+  font-size: clamp(2.25rem, 6vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+
+.text-gradient-subtle {
+  background: linear-gradient(180deg, #FAFAFA 0%, #71717A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Floating Glass Navigation (56px, rounded-2xl, top: 24px) */
+.floating-nav {
+  background: rgba(9, 9, 11, 0.75);
+  border: 1px solid var(--border-default);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
+  transition: all 0.2s ease-out;
+}
+
+.floating-nav:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Bento Card Surfaces & Borders */
+.bento-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-default);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.bento-card:hover {
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+/* Micro-Interactions & Button Feedback */
+.btn-primary {
+  transition: transform 150ms ease-out, background-color 150ms ease, box-shadow 150ms ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 20px var(--emerald-glow);
+}
+
+.btn-hero-primary {
+  transition: transform 150ms ease-out, box-shadow 150ms ease;
+}
+
+.btn-hero-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 25px -5px var(--emerald-glow);
+}
+
+/* Dynamic Latency Histogram Animation */
+.hist-bar {
+  transition: height 350ms cubic-bezier(0.4, 0, 0.2, 1), background-color 200ms ease;
+}
+
+.hist-bar:hover {
+  filter: brightness(1.25);
+}
+
+/* Ambient Background Grid Pattern */
+.grid-background {
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Radial Glow Helper */
+.bg-gradient-radial {
+  background: radial-gradient(circle at center, var(--tw-gradient-stops));
+}
+
+/* Custom Scrollbars for Code/JSON Boxes */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #09090B;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Command Palette Animation */
+#cmd-palette-modal.open,
+#easter-egg-modal.open {
+  display: flex !important;
+  opacity: 1 !important;
+}
+
+#cmd-palette-card {
+  transform: scale(0.96);
+  transition: transform 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#cmd-palette-modal.open #cmd-palette-card {
+  transform: scale(1);
+}
+
+/* JSON Viewer Highlighting */
+.json-key {
+  color: #93C5FD;
+}
+
+.json-string {
+  color: #FDE047;
+}
+
+.json-number {
+  color: #34D399;
+}
+
+.json-boolean {
+  color: #A78BFA;
+}
+
+.json-null {
+  color: #F87171;
+}
+
+.json-collapse-toggle {
+  cursor: pointer;
+  user-select: none;
+  display: inline-block;
+  width: 12px;
+  color: #71717A;
+}
+
+.json-collapse-toggle:hover {
+  color: #EDEDED;
+}
+
+/* Responsive Constraints: 390px mobile to 1440px desktop */
+@media (max-width: 640px) {
+  .hero-heading {
+    font-size: 2.25rem;
+    line-height: 1.1;
+  }
+}
