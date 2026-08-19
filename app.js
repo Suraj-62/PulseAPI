@@ -1,17 +1,8 @@
-/**
- * PulseAPI — Interactive Engine & Telemetry Simulator
- * High-performance, zero-dependency client script
- */
-
 document.addEventListener('DOMContentLoaded', () => {
-  // Initialize Lucide Icons
   if (window.lucide) {
     window.lucide.createIcons();
   }
 
-  /* ==========================================================================
-     1. REGION SWITCHER & DYNAMIC LATENCY HISTOGRAM
-     ========================================================================== */
   const regionData = {
     iad1: {
       name: 'IAD (US-East)',
@@ -60,7 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderHistogram(regionKey) {
     const data = regionData[regionKey] || regionData.iad1;
     
-    // Update metric badges
     if (badgeIngest) badgeIngest.textContent = data.ingest;
     if (badgeJwt) badgeJwt.textContent = data.jwt;
     if (badgeWorker) badgeWorker.textContent = data.worker;
@@ -69,7 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (histP95) histP95.textContent = data.p95;
     if (histP99) histP99.textContent = data.p99;
 
-    // Render bars
     if (histContainer) {
       histContainer.innerHTML = '';
       data.distribution.forEach((val, idx) => {
@@ -77,7 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
         bar.className = 'hist-bar flex-1 rounded-t transition-all duration-300 relative group cursor-pointer';
         bar.style.height = `${val}%`;
         
-        // Color coding: p50 (emerald), p95 (amber), p99 (rose)
         if (idx < 5) {
           bar.style.backgroundColor = '#34D399';
         } else if (idx < 9) {
@@ -86,17 +74,14 @@ document.addEventListener('DOMContentLoaded', () => {
           bar.style.backgroundColor = '#F87171';
         }
 
-        // Hover tooltip
         bar.setAttribute('title', `Bucket ${(idx * 0.04).toFixed(2)}ms: ${val * 1250} traces`);
         histContainer.appendChild(bar);
       });
     }
   }
 
-  // Initial render
   renderHistogram('iad1');
 
-  // Region switcher click events
   document.querySelectorAll('.region-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       document.querySelectorAll('.region-btn').forEach(b => {
@@ -107,9 +92,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  /* ==========================================================================
-     2. DETERMINISTIC ONE-CLICK PAYLOAD REPLAYER
-     ========================================================================== */
   const bentoReplayBtn = document.getElementById('bento-replay-btn');
   const replayStatusBadge = document.getElementById('replay-status-badge');
   const diffLine2 = document.getElementById('diff-line-2');
@@ -122,13 +104,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (isReplaying) return;
       isReplaying = true;
 
-      // Loading state
       if (replaySpinnerIcon) replaySpinnerIcon.classList.add('animate-spin');
       if (replayBtnText) replayBtnText.textContent = 'Dispatching Replay (450ms)...';
       bentoReplayBtn.disabled = true;
 
       setTimeout(() => {
-        // Success state
         if (replaySpinnerIcon) replaySpinnerIcon.classList.remove('animate-spin');
         if (replayBtnText) replayBtnText.textContent = 'Payload Replayed (200 OK)';
         
@@ -141,7 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
           diffLine2.classList.remove('hidden');
         }
 
-        // Reset back after 4 seconds
         setTimeout(() => {
           if (replayBtnText) replayBtnText.textContent = 'Replay to Localhost:3000';
           if (replayStatusBadge) {
@@ -159,9 +138,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* ==========================================================================
-     3. ZERO-SDK CODE SNIPPETS & COPY UTILITY
-     ========================================================================== */
   const sdkSnippets = {
     curl: `<span class="text-purple-400">curl</span> -X POST https://edge.pulseapi.dev/v1/proxy \\
   -H <span class="text-emerald-400">"X-Pulse-Key: pk_live_94f8..."</span> \\
@@ -201,7 +177,6 @@ res = requests.post(
     });
   });
 
-  // Copy Snippet Trigger
   const copySnippetBtn = document.getElementById('copy-snippet-btn');
   const copyBtnLabel = document.getElementById('copy-btn-label');
   if (copySnippetBtn && copyBtnLabel) {
@@ -218,7 +193,6 @@ res = requests.post(
     });
   }
 
-  // Hero CLI Copy Trigger
   const heroCliBox = document.getElementById('hero-cli-box');
   const heroCliText = document.getElementById('hero-cli-text');
   const heroCliCopyBtn = document.getElementById('hero-cli-copy-btn');
@@ -237,9 +211,6 @@ res = requests.post(
     });
   }
 
-  /* ==========================================================================
-     4. INTERACTIVE TERMINAL & COLLAPSIBLE JSON TREE
-     ========================================================================== */
   const terminalData = {
     post: {
       endpoint: '/webhooks/stripe',
@@ -334,9 +305,6 @@ res = requests.post(
     });
   });
 
-  /* ==========================================================================
-     5. INTERACTIVE LIVE SIMULATOR & FLAMEGRAPH DISPATCH
-     ========================================================================== */
   const eventPayloads = {
     stripe: {
       headers: [
@@ -440,7 +408,6 @@ res = requests.post(
         dispatchSimBtn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5"></i> Packet Ingested';
         if (window.lucide) window.lucide.createIcons();
 
-        // Append log line to stream
         if (kernelTraceLog) {
           const now = new Date().toISOString().substring(11, 23);
           const logEntry = document.createElement('div');
@@ -456,9 +423,6 @@ res = requests.post(
     });
   }
 
-  /* ==========================================================================
-     6. COMMAND PALETTE (⌘K / Ctrl+K)
-     ========================================================================== */
   const cmdPaletteModal = document.getElementById('cmd-palette-modal');
   const cmdKTriggerBtn = document.getElementById('cmd-k-trigger-btn');
   const openCmdKFooterBtn = document.getElementById('open-cmd-k-footer-btn');
@@ -483,7 +447,6 @@ res = requests.post(
     }
   }
 
-  // Real-time filtering in Command Palette
   if (cmdPaletteInput) {
     cmdPaletteInput.addEventListener('input', (e) => {
       const q = e.target.value.toLowerCase().trim();
@@ -509,7 +472,6 @@ res = requests.post(
     });
   }
 
-  // Handle Command Palette Actions
   document.querySelectorAll('.cmd-item').forEach(item => {
     item.addEventListener('click', () => {
       const action = item.dataset.action;
@@ -529,9 +491,6 @@ res = requests.post(
     });
   });
 
-  /* ==========================================================================
-     7. EASTER EGG: RETRO CYBERPUNK HUD (BONUS ROUND)
-     ========================================================================== */
   const easterEggModal = document.getElementById('easter-egg-modal');
   const easterEggBtn = document.getElementById('easter-egg-btn');
   const mobileHudBtn = document.getElementById('mobile-hud-btn');
@@ -561,12 +520,10 @@ res = requests.post(
     });
   }
 
-  // Global Keyboard Shortcuts (⌘K, ~, ESC, Konami Code)
   let konamiPattern = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
   let konamiIndex = 0;
 
   window.addEventListener('keydown', (e) => {
-    // ⌘K or Ctrl+K
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
       e.preventDefault();
       if (cmdPaletteModal?.classList.contains('open')) {
@@ -577,7 +534,6 @@ res = requests.post(
       return;
     }
 
-    // Tilde key `~`
     if (e.key === '`' || e.key === '~') {
       if (document.activeElement.tagName !== 'INPUT') {
         e.preventDefault();
@@ -586,14 +542,12 @@ res = requests.post(
       }
     }
 
-    // ESC key
     if (e.key === 'Escape') {
       closeCmdPalette();
       closeEasterEgg();
       return;
     }
 
-    // Konami Code Detection
     if (e.key === konamiPattern[konamiIndex] || e.key.toLowerCase() === konamiPattern[konamiIndex]) {
       konamiIndex++;
       if (konamiIndex === konamiPattern.length) {
@@ -605,9 +559,6 @@ res = requests.post(
     }
   });
 
-  /* ==========================================================================
-     8. MOBILE MENU TOGGLE
-     ========================================================================== */
   const mobileMenuBtn = document.getElementById('mobile-menu-btn');
   const mobileMenu = document.getElementById('mobile-menu');
   if (mobileMenuBtn && mobileMenu) {
