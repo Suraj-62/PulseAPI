@@ -69,4 +69,5 @@ npx serve .
 - `index.html`: Semantic landing page markup
 - `styles.css`: Complete Linear/Vercel design system tokens
 - `app.js`: Interactive telemetry simulator and shortcut handlers
-- `DECISIONS.md`: 1-page engineering rationale document
+- `decision.md`: 1-page engineering rationale document (Q&A format)
+- `DECISIONS.md`: Engineering rationale document
